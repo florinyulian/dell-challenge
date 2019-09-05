@@ -1,8 +1,11 @@
 ﻿using DellChallenge.D1.Api.Dal;
 using DellChallenge.D1.Api.Dto;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DellChallenge.D1.Api.Controllers
 {
@@ -24,11 +27,23 @@ namespace DellChallenge.D1.Api.Controllers
             return Ok(_productsService.GetAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [EnableCors("AllowReactCors")]
-        public ActionResult<string> Get(int id)
+        public async Task<ActionResult<Product>> Get(int id)
         {
-            return "value";
+            try
+            {
+                var result = await _productsService.GetProductByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost]
@@ -39,16 +54,19 @@ namespace DellChallenge.D1.Api.Controllers
             return Ok(addedProduct);
         }
 
-        [HttpDelete("{id}")]
-        [EnableCors("AllowReactCors")]
-        public void Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
+            await _productsService.DeleteAsync(id);
+            return Ok();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         [EnableCors("AllowReactCors")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] NewProductDto newProduct)
         {
+            await _productsService.UpdateAsync(id, newProduct);
+            return Accepted();
         }
     }
 }

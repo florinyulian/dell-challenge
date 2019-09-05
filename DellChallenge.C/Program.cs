@@ -16,24 +16,12 @@ namespace DellChallenge.C
 
         private static void StartHere()
         {
-            myObject _MyNewObject = new myObject();
-            int obj1 = _MyNewObject.Do(1, 3);
-            int num2 = _MyNewObject.DoExtended(1, 3, 5);
-            Console.WriteLine(obj1);
-            Console.WriteLine(num2);
+            MySum mySum = new MySum();
+            int sum1 = mySum.SumN(1, 3);
+            int sum2 = mySum.SumN(1, 3, 5);
+            Console.WriteLine(sum1);
+            Console.WriteLine(sum2);
         }
     }
 
-    class myObject
-    {
-
-        public int Do(int a, int b)
-        {
-            return a + b;
-        }
-
-        public int DoExtended(int a, int b, int c)
-        { return a + b + c;
-        }
-    }
 }

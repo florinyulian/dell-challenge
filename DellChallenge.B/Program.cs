@@ -12,11 +12,21 @@ namespace DellChallenge.B
         }
     }
 
-    public interface ISpecies
+
+
+    public interface IEatAndDrink
     {
         void Eat();
         void Drink();
+    }
+
+    public interface IFly
+    {
         void Fly();
+    }
+
+    public interface ISwim
+    {
         void Swim();
     }
 
@@ -28,7 +38,7 @@ namespace DellChallenge.B
         }
     }
 
-    public class Human : ISpecies
+    public class Human : IEatAndDrink, ISwim, IFly
     {
         public void Drink()
         {
@@ -51,12 +61,20 @@ namespace DellChallenge.B
         }
     }
 
-    public class Bird
+    public class Bird : IFly
     {
+        public void Fly()
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class Fish
+    public class Fish : ISwim
     {
+        public void Swim()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DellChallenge.D1.Api.Dto;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
-using DellChallenge.D1.Api.Dto;
+using System.Threading.Tasks;
 
 namespace DellChallenge.D1.Api.Dal
 {
@@ -18,6 +20,11 @@ namespace DellChallenge.D1.Api.Dal
             return _context.Products.Select(p => MapToDto(p));
         }
 
+        public async Task<Product> GetProductByIdAsync(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
         public ProductDto Add(NewProductDto newProduct)
         {
             var product = MapToData(newProduct);
@@ -27,9 +34,19 @@ namespace DellChallenge.D1.Api.Dal
             return addedDto;
         }
 
-        public ProductDto Delete(string id)
+        public async Task DeleteAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var product = await GetProductByIdAsync(id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(int id, NewProductDto newProduct)
+        {
+            var entity = await GetProductByIdAsync(id);
+            entity.Category = newProduct.Category;
+            entity.Name = newProduct.Name;
+            await _context.SaveChangesAsync();
         }
 
         private Product MapToData(NewProductDto newProduct)

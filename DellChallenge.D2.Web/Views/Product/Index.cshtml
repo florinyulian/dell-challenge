@@ -6,11 +6,32 @@
 <h4>All Products</h4>
 <hr />
 
+@if (Model != null)
+{
 @foreach (var item in Model)
 {
-    <div class="row">
-        <div class="col-md-4">
-            @item.Name - @item.Category
-        </div>
+<div class="row">
+    <div class="col-md-4">
+        @item.Id - @item.Name - @item.Category
+    </div>
+    <div class="col-md-4">
+        <a asp-controller="Product" asp-action="Update"
+           asp-route-id="@item.Id">
+            Edit
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-action="DeleteProductByIdAsync"
+           asp-controller="Product"
+           asp-route-id="@item.Id">
+            Delete
+        </a>
+    </div>
+</div>
+}
+}
+else {
+    <div>
+        <h3>No products where found</h3>
     </div>
 }
